@@ -214,13 +214,26 @@ def main():
             unsafe_allow_html=True
         )
 
-        st.markdown("#### All probabilities")
-        sorted_probs = sorted(all_probs.items(), key=lambda x: x[1], reverse=True)
-        for emo, prob in sorted_probs:
-            st.progress(
-                int(prob),
-                text=f"{EMOJI.get(emo, '')} {emo:10s}  {prob:.1f}%"
-            )
+        # Show only top emotion — nothing else
+        top_emotion = sorted(all_probs.items(), key=lambda x: x[1], reverse=True)[0]
+        emo, prob   = top_emotion
+
+        st.markdown(
+            f"""
+            <div style="background:linear-gradient(135deg,#1F4E79,#2E75B6);
+                        color:white; padding:30px; border-radius:15px;
+                        text-align:center;">
+                <div style="font-size:4rem;">{EMOJI.get(emo, '🎭')}</div>
+                <div style="font-size:2rem; font-weight:bold; margin-top:10px;">
+                    {emo.upper()}
+                </div>
+                <div style="font-size:1.2rem; margin-top:8px; opacity:0.85;">
+                    Confidence: {prob:.1f}%
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 if __name__ == "__main__":
     main()
