@@ -59,9 +59,9 @@ def load_model():
     model = MViTCnG(
         num_classes=7,
         image_size=48,
-        embed_dim=256,
-        num_heads=8,
-        num_layers=4,
+        embed_dim=128,
+        num_heads=4,
+        num_layers=3,
         dropout=0.0,
         contrastive_dim=128
     ).to(device)
