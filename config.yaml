@@ -1,0 +1,34 @@
+# config.yaml — Place this in your project root folder
+ 
+# Dataset settings
+data:
+  fer2013_path: "data/fer2013"
+  ckplus_path: "data/ckplus"
+  image_size: 48
+  num_classes_fer: 7        # angry, disgust, fear, happy, sad, surprise, neutral
+  num_classes_ck: 6         # angry, disgust, fear, happy, sad, surprise
+ 
+# Model hyperparameters (from the paper)
+model:
+  patch_size: 4             # Size of each image patch
+  embed_dim: 768            # Embedding dimension
+  num_heads: 12             # Number of attention heads
+  num_layers: 12            # Number of transformer layers
+  mlp_ratio: 4              # Feedforward network expansion ratio
+  num_scales: 3             # Number of scales for multi-scale processing
+  contrastive_dim: 128      # Contrastive projection dimension
+  dropout: 0.2
+ 
+# Training settings
+training:
+  batch_size: 32
+  epochs: 100
+  learning_rate: 0.001
+  optimizer: "adam"
+  loss: "nce"
+  save_dir: "models/"
+  log_dir: "outputs/logs/"
+ 
+# Emotion labels
+emotions_fer: ["angry", "disgust", "fear", "happy", "sad", "surprise", "neutral"]
+emotions_ck:  ["angry", "disgust", "fear", "happy", "sad", "surprise"]
