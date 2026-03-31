@@ -86,17 +86,13 @@ EMOTION_COLORS = {
  
 # ─── Model Loading (cached for performance) ───────────────────────────────────
 @st.cache_resource
-def load_model(dataset='fer2013'):
+def load_model():
     """Load model once and cache it — prevents reloading on every interaction."""
     with open('config.yaml') as f:
         cfg = yaml.safe_load(f)
     
-    if dataset == 'fer2013':
-        num_classes = cfg['data']['num_classes_fer']
-        emotions = cfg['emotions_fer']
-    else:
-        num_classes = cfg['data']['num_classes_ck']
-        emotions = cfg['emotions_ck']
+    num_classes = cfg['data']['num_classes']
+    emotions = cfg['emotions']
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
@@ -110,7 +106,7 @@ def load_model(dataset='fer2013'):
         contrastive_dim=cfg['model']['contrastive_dim']
     ).to(device)
     
-    checkpoint_path = f"models/mvit_cng_{dataset}.pth"
+    checkpoint_path = "models/mvit_cng_fer2013.pth"
     
     if Path(checkpoint_path).exists():
         checkpoint = torch.load(checkpoint_path, map_location=device)
@@ -195,14 +191,7 @@ def main():
     
     # Sidebar
     st.sidebar.header("⚙️ Settings")
-    dataset_choice = st.sidebar.selectbox(
-        "Select Model",
-        ["fer2013 (7 emotions)", "ckplus (6 emotions)"],
-        index=0
-    )
-    dataset = "fer2013" if "fer2013" in dataset_choice else "ckplus"
-    
-    model, emotions, device = load_model(dataset)
+    model, emotions, device = load_model()
     
     st.sidebar.markdown("---")
     st.sidebar.markdown(f"**Device:** {'🟢 GPU' if device.type == 'cuda' else '🔵 CPU'}")
