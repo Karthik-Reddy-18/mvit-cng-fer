@@ -107,7 +107,7 @@ def evaluate(model, dataloader, criterion, device):
         'accuracy': 100.0 * correct / total_samples
     }
  
-def train(dataset_name='fer2013'):
+def train():
     """Main training function."""
     
     # Load config
@@ -128,7 +128,7 @@ def train(dataset_name='fer2013'):
     # Load data
     print("\n📁 Loading datasets...")
     train_loader, test_loader, num_classes = get_dataloaders(
-        dataset_name=dataset_name,
+        dataset_name='fer2013',
         batch_size=cfg['training']['batch_size']
     )
     print(f"   Train batches: {len(train_loader)}")
@@ -206,7 +206,7 @@ def train(dataset_name='fer2013'):
         # Save best model
         if test_metrics['accuracy'] > best_acc:
             best_acc = test_metrics['accuracy']
-            save_path = f"{cfg['training']['save_dir']}mvit_cng_{dataset_name}.pth"
+            save_path = f"{cfg['training']['save_dir']}mvit_cng_fer2013.pth"
             torch.save({
                 'epoch': epoch,
                 'model_state_dict': model.state_dict(),
@@ -217,7 +217,7 @@ def train(dataset_name='fer2013'):
             print(f"  ✅ Best model saved! Accuracy: {best_acc:.2f}%")
     
     # Save training history
-    log_path = f"{cfg['training']['log_dir']}history_{dataset_name}.json"
+    log_path = f"{cfg['training']['log_dir']}history_fer2013.json"
     with open(log_path, 'w') as f:
         json.dump(history, f, indent=2)
     
@@ -228,8 +228,4 @@ def train(dataset_name='fer2013'):
     return history
  
 if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', default='fer2013', choices=['fer2013', 'ckplus'])
-    args = parser.parse_args()
-    train(dataset_name=args.dataset)
+    train()
