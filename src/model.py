@@ -50,22 +50,19 @@ class MultiHeadSelfAttention(nn.Module):
 
 
 class FeedForwardNetwork(nn.Module):
-    def __init__(self, embed_dim=768, mlp_ratio=4, dropout=0.1):
+    def __init__(self, embed_dim=256, mlp_ratio=4, dropout=0.1):
         super().__init__()
-        hidden_dim  = int(embed_dim * mlp_ratio)
-        self.fc1     = nn.Linear(embed_dim, hidden_dim)
-        self.act     = nn.GELU()
-        self.dropout1 = nn.Dropout(dropout)
-        self.fc2     = nn.Linear(hidden_dim, embed_dim)
-        self.dropout2 = nn.Dropout(dropout)
+        hidden = int(embed_dim * mlp_ratio)
+        self.net = nn.Sequential(
+            nn.Linear(embed_dim, hidden),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(hidden, embed_dim),
+            nn.Dropout(dropout)
+        )
 
     def forward(self, x):
-        x = self.fc1(x)
-        x = self.act(x)
-        x = self.dropout1(x)
-        x = self.fc2(x)
-        x = self.dropout2(x)
-        return x
+        return self.net(x)
 
 
 class TransformerBlock(nn.Module):
