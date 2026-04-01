@@ -5,7 +5,9 @@ Run with: streamlit run app/streamlit_app.py
 
 import streamlit as st
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
+import torchvision.models as models
 import cv2
 import numpy as np
 from PIL import Image
