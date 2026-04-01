@@ -148,7 +148,7 @@ def draw_box(image_pil, box, emotion, confidence):
 
 # ─── Main UI ──────────────────────────────────────────────────────────────────
 def main():
-    st.title("🎭 Facial Emotion Recognizer")
+    st.title("🎭 Facial Emotion Recognizer (Biaatttcccchhhh)")
     st.caption("Powered by Multi-Scale Vision Transformer with Contrastive Learning")
 
     # Load model
