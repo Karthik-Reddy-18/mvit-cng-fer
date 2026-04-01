@@ -215,12 +215,12 @@ def main():
 
         # Big result card
         st.markdown(
-            f"""
+            f"""why are you
             <div style="background:linear-gradient(135deg,#1F4E79,#2E75B6);
                         color:white;padding:20px;border-radius:12px;
                         text-align:center;font-size:2rem;font-weight:bold;">
                 {EMOJI.get(emotion, '🎭')} {emotion.upper()} &nbsp;—&nbsp; {confidence:.1f}%
-            </div>
+            </div> biaattchh
             """,
             unsafe_allow_html=True
         )
