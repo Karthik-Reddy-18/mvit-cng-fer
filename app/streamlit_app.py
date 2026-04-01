@@ -116,8 +116,13 @@ def predict(model, device, image_pil):
     tensor = transform(face_pil).unsqueeze(0).to(device)  # [1, 3, 48, 48]
 
     with torch.no_grad():
-        logits, _ = model(tensor)
-        probs     = F.softmax(logits, dim=-1)[0]
+        output = model(tensor)
+        # Handle both old model (returns tuple) and new model (returns tensor)
+        if isinstance(output, tuple):
+            logits = output[0]
+        else:
+            logits = output
+        probs = F.softmax(logits, dim=-1)[0]
 
     pred_idx   = torch.argmax(probs).item()
     emotion    = EMOTIONS[pred_idx]
