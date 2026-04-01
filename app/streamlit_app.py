@@ -43,7 +43,7 @@ EMOJI = {
 # ─── Transforms ───────────────────────────────────────────────────────────────
 def get_transform():
     return transforms.Compose([
-        transforms.Resize((48, 48)),
+        transforms.Resize((64, 64)),
         transforms.ToTensor(),
         transforms.Normalize(
             mean=[0.485, 0.456, 0.406],
@@ -54,18 +54,22 @@ def get_transform():
 # ─── Load model ───────────────────────────────────────────────────────────────
 @st.cache_resource
 def load_model():
+    import torchvision.models as models
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    model = MViTCnG(
-        num_classes=7,
-        image_size=48,
-        embed_dim=128,
-        num_heads=4,
-        num_layers=3,
-        dropout=0.0,
-        contrastive_dim=128
-    ).to(device)
+    # MobileNetV3 architecture — must match training
+    class FastFERModel(nn.Module):
+        def __init__(self, num_classes=7):
+            super().__init__()
+            self.backbone = models.mobilenet_v3_small(weights=None)
+            in_features   = self.backbone.classifier[3].in_features
+            self.backbone.classifier[3] = nn.Linear(in_features, num_classes)
 
+        def forward(self, x):
+            return self.backbone(x)
+
+    model      = FastFERModel(num_classes=7).to(device)
     model_path = Path("models/mvit_cng_fer2013.pth")
 
     if not model_path.exists():
